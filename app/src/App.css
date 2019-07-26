@@ -14,7 +14,37 @@
   justify-content: center;
 }
 
+.App-heading {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  background-color: #eeeeee;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.App-button-pichichis {
+  padding: 5px 15px;
+  border-radius: 25px;
+  font-size: 13px;
+  border: solid 1px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 25px;
+  cursor: pointer;
+  transform: all 0.3s;
+}
+
+.App-button-pichichis:hover {
+  background-color: #c4c4c4;
+}
+
 .App-players {
+  margin-top: 40px;
   flex-wrap: wrap;
 }
 

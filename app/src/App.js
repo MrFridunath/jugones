@@ -31,6 +31,9 @@ class App extends PureComponent {
     const { players, teams } = this.state
 
     return <div className="App">
+	  <header className="App-heading">
+	    <button className="App-button-pichichis">Pichichis</button>
+	  </header>
       <div className="App-players App-flex">
         {/* 
           TODO ejercicio 2
