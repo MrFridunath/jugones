@@ -230,8 +230,15 @@ app.get('/players', function (req, res) {
 	if (madridTemp.players[i].img) {
 	  img = madridTemp.players[i].img;
 	}
-	else {
+	else if (madridTemp.players[i].url) {
 	  img = madridTemp.players[i].url;
+	}
+	else {
+      for (let j in atleticoImages) {
+	    if (j === madridTemp.players[i].id) {
+		  img = atleticoImages[j];
+	    }
+      }
 	}
     let player = {
 	  id: madridTemp.players[i].id,
@@ -247,8 +254,15 @@ app.get('/players', function (req, res) {
 	if (barsaTemp.players[i].img) {
 	  img = barsaTemp.players[i].img;
 	}
-	else {
+	else if (barsaTemp.players[i].url) {
 	  img = barsaTemp.players[i].url;
+	}
+	else {
+      for (let j in atleticoImages) {
+	    if (j === barsaTemp.players[i].id) {
+		  img = atleticoImages[j];
+	    }
+      }
 	}
     let player = {
 	  id: barsaTemp.players[i].id,
@@ -260,16 +274,25 @@ app.get('/players', function (req, res) {
 	players.push(player);
   }
   for (let i in atleticoTemp.players) {
-    for (let j in atleticoImages) {
-	  if (j === atleticoTemp.players[i].id) {
-		atleticoTemp.players[i].img = atleticoImages[j];
-	  }
-    }
+	let img;
+	if (atleticoTemp.players[i].img) {
+	  img = atleticoTemp.players[i].img;
+	}
+	else if (atleticoTemp.players[i].url) {
+	  img = atleticoTemp.players[i].url;
+	}
+	else {
+      for (let j in atleticoImages) {
+	    if (j === atleticoTemp.players[i].id) {
+		  img = atleticoImages[j];
+	    }
+      }
+	}
     let player = {
 	  id: atleticoTemp.players[i].id,
 	  name: atleticoTemp.players[i].name,
 	  position: POSITIONS_STRING[atleticoTemp.players[i].position],
-	  img: atleticoTemp.players[i].img,
+	  img: img,
 	  teamId: atleticoTemp.id
 	};
 	players.push(player);
@@ -316,6 +339,14 @@ app.post('/transfer', function (req, res) {
   // TODO ejercicio 8
   // añade el código para cambiar de equipo al jugador
   // restar el precio de la transacción al equipo
+  team.players.push(player); 
+  team.money -= player.price;
+  teamsMap[teamIdPlayer].money += player.price;
+  for (let i in teamsMap[teamIdPlayer].players) {
+	if (teamsMap[teamIdPlayer].players[i].id === playerId) {
+	  teamsMap[teamIdPlayer].players.splice(parseInt(i), 1);
+	}
+  }
 
   res.json({})
 });
