@@ -220,7 +220,58 @@ app.get('/players', function (req, res) {
   // ]
   // TIP: familiarizate primero con los objetos de los equipos: var madrid, barcelona y atletico.
   // TIP2: asegurate que position no es el código de la posición, si no el string
-  res.json({})
+  let players = [];
+  let madridTemp = { ...madrid }
+  let barsaTemp = { ...barcelona }
+  let atleticoTemp = { ...atletico }
+  
+  for (let i in madridTemp.players) {
+	let img;
+	if (madridTemp.players[i].img) {
+	  img = madridTemp.players[i].img;
+	}
+	else {
+	  img = madridTemp.players[i].url;
+	}
+    let player = {
+	  name: madridTemp.players[i].name,
+	  position: POSITIONS_STRING[madridTemp.players[i].position],
+	  img: img,
+	  teamId: madridTemp.id
+	};
+	players.push(player);
+  }
+  for (let i in barsaTemp.players) {
+	let img;
+	if (barsaTemp.players[i].img) {
+	  img = barsaTemp.players[i].img;
+	}
+	else {
+	  img = barsaTemp.players[i].url;
+	}
+    let player = {
+	  name: barsaTemp.players[i].name,
+	  position: POSITIONS_STRING[barsaTemp.players[i].position],
+	  img: img,
+	  teamId: barsaTemp.id
+	};
+	players.push(player);
+  }
+  for (let i in atleticoTemp.players) {
+    for (let j in atleticoImages) {
+	  if (j === atleticoTemp.players[i].id) {
+		atleticoTemp.players[i].img = atleticoImages[j];
+	  }
+    }
+    let player = {
+	  name: atleticoTemp.players[i].name,
+	  position: POSITIONS_STRING[atleticoTemp.players[i].position],
+	  img: atleticoTemp.players[i].img,
+	  teamId: atleticoTemp.id
+	};
+	players.push(player);
+  }
+  res.status(200).send(players);
 });
 
 app.get('/pichichis', function (req, res) {
