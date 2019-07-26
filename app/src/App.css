@@ -15,5 +15,84 @@
 }
 
 .App-players {
+  flex-wrap: wrap;
+}
+
+.App-player {
+  min-width: 280px;
+  border: solid 1px lightgray;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 20px;
+}
+
+.App-player-img {
+  height: 150px;
+  width: 150px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  border: solid 1px transparent;
+  border-radius: 90px;
+}
+
+.App-player-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-player-section {
+  margin-top: 10px;
+  display: flex; 
+  align-items: center;
+}
+
+.App-player-name {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.App-player-team {
+  margin-top: 2px;
+  font-size: 14px;
+}
+
+.App-player-position {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.App-player-shield {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 25px;
+}
+
+@media screen and (max-width: 700px) {
+  .App-player {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .App-player-img {
+    width: 60px;
+    height: 60px;
+  }
+  .App-player {
+    flex-direction: row;
+	justify-content: flex-start;
+  }
+  .App-player-data {
+	margin-left: 10px;
+	align-items: flex-start;
+  }
+  
 }

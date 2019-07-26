@@ -234,6 +234,7 @@ app.get('/players', function (req, res) {
 	  img = madridTemp.players[i].url;
 	}
     let player = {
+	  id: madridTemp.players[i].id,
 	  name: madridTemp.players[i].name,
 	  position: POSITIONS_STRING[madridTemp.players[i].position],
 	  img: img,
@@ -250,6 +251,7 @@ app.get('/players', function (req, res) {
 	  img = barsaTemp.players[i].url;
 	}
     let player = {
+	  id: barsaTemp.players[i].id,
 	  name: barsaTemp.players[i].name,
 	  position: POSITIONS_STRING[barsaTemp.players[i].position],
 	  img: img,
@@ -264,6 +266,7 @@ app.get('/players', function (req, res) {
 	  }
     }
     let player = {
+	  id: atleticoTemp.players[i].id,
 	  name: atleticoTemp.players[i].name,
 	  position: POSITIONS_STRING[atleticoTemp.players[i].position],
 	  img: atleticoTemp.players[i].img,
