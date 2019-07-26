@@ -8,10 +8,22 @@ class ModalPichichis extends React.Component {
   
   constructor (props) {
 	super(props);
+	this.state = {ascendingOrder: false};
+	this.toggleSortList = this.toggleSortList.bind(this);
+  }
+  
+  toggleSortList () {
+	this.setState({ascendingOrder: !this.state.ascendingOrder});
   }
   
   render() {
-	var pichichisList = this.props.pichichis;
+	var pichichisList = [];
+	if (this.state.ascendingOrder) {
+	  pichichisList = this.props.pichichis.sort((a,b) => (((a.goals) ? ((typeof a.goals === 'string') ? parseInt(a.goals.replace(/ /g, '')) : a.goals ) : 0) < ((b.goals) ? ((typeof b.goals === 'string') ? parseInt(b.goals.replace(/ /g, '')) : b.goals ) : 0) ? 1 : (((b.goals) ? ((typeof b.goals === 'string') ? parseInt(b.goals.replace(/ /g, '')) : b.goals ) : 0) < ((a.goals) ? ((typeof a.goals === 'string') ? parseInt(a.goals.replace(/ /g, '')) : b.goals ) : 0) ? -1 : 0)));
+	}
+	else {
+	  pichichisList = this.props.pichichis.sort((a,b) => (((a.goals) ? ((typeof a.goals === 'string') ? parseInt(a.goals.replace(/ /g, '')) : a.goals ) : 0) > ((b.goals) ? ((typeof b.goals === 'string') ? parseInt(b.goals.replace(/ /g, '')) : b.goals ) : 0) ? 1 : (((b.goals) ? ((typeof b.goals === 'string') ? parseInt(b.goals.replace(/ /g, '')) : b.goals ) : 0) > ((a.goals) ? ((typeof a.goals === 'string') ? parseInt(a.goals.replace(/ /g, '')) : b.goals ) : 0) ? -1 : 0)));
+	}
 	return (
 	  <div className="Modal" style={(this.props.pichichisVisible) ? {display: 'flex'} : {display: 'none'}}>
 	    <div className="Modal-content">
@@ -44,6 +56,7 @@ class ModalPichichis extends React.Component {
 		  </div>
 		  <div className="Modal-footer">
 		    <button className="App-button" onClick={this.props.handleModal}>Cerrar</button>
+		    <button className="App-button" onClick={this.toggleSortList}>{(this.state.ascendingOrder) ? 'Ordenar ascendentemente' : 'Ordenar descendentemente'}</button>
 		  </div>
 		</div>
 	  </div>
