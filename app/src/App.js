@@ -4,6 +4,116 @@ import './App.css'
 import React, { PureComponent } from 'react'
 const domain = 'http://localhost:3001'
 
+class ModalTransferencia extends React.Component {
+  
+  constructor (props) {
+	super(props);
+	this.state = {teamValue: '', playerValue: ''};
+	
+	this.handleChangeTeam = this.handleChangeTeam.bind(this);
+	this.handleChangePlayer = this.handleChangePlayer.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChangeTeam(event) {
+    this.setState({teamValue: event.target.value});
+  }
+  
+  handleChangePlayer(event) {
+    this.setState({playerValue: event.target.value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+	let data = {
+	  playerId: this.state.playerValue,
+	  teamId: this.state.teamValue
+	};
+	let headers = {
+	  'Accept': 'application/json',
+	  'Content-Type': 'application/json'
+	};
+	fetch(`${domain}/transfer`, {method: 'POST', headers: headers, body: JSON.stringify(data)})
+      .then(response => {
+        return response.json();
+      })
+      .then(message => {
+        if (message.error) {
+		  console.log('error: ' + message.message);
+		  alert('error: ' + message.message);
+		}
+		else {
+		  this.props.updateApp();
+		  alert("La transferencia se realizó correctamente.");
+		  this.props.handleModal();
+		}
+      });
+  } 
+ 
+  render() {
+	var playersList = [];
+	this.props.players.map(player => {
+	  if (player.teamId !== this.state.teamValue) {
+		playersList.push(player);
+	  }
+	})
+	return (
+	  <div className="Modal" style={(this.props.transferenciasVisible) ? {display: 'flex'} : {display: 'none'}}>
+	    <form className="Modal-content" onSubmit={this.handleSubmit}>
+		  <div className="Modal-body">
+		    <div className="Modal-section-inline">
+			  <div className="Modal-section-group">
+			    <label>
+				  <b>Equipos:</b>
+				</label>
+				<select className="App-select" value={this.state.teamValue} onChange={this.handleChangeTeam}>
+				  {
+				    this.props.teams.map(team => {
+					  return (
+					    <option value={team.id}>{team.name}</option>
+					  )
+					})
+				  }
+				</select>
+			    {
+				  this.props.teams.map(team => {
+				    if (team.id === this.state.teamValue) {
+					  return (
+				        <div className="Modal-input-budget">
+			              <b>Presupuesto:</b>
+				          <span className="Modal-input-budget-style">{team.money} €</span>
+				        </div>
+					  )
+					}
+				  })
+				}
+			  </div>
+			  <div className="Modal-section-group">
+			    <label>
+				  <b>Jugadores:</b>
+				</label>
+				<select className="App-select" value={this.state.playerValue} onChange={this.handleChangePlayer}>
+				  {
+				    playersList.map(player => {
+					  return (
+					    <option value={player.id}>{player.name}</option>
+					  )
+					})
+				  }
+				</select>
+			  </div>
+			</div>
+		  </div>
+		  <div className="Modal-footer">
+		    <button type="button" className="App-button" onClick={this.props.handleModal}>Cerrar</button>
+		    <button type="submit" className="App-button">Transferir</button>
+		  </div>
+		</form>
+	  </div>
+	)
+  }	  
+}
+
 class ModalPichichis extends React.Component {
   
   constructor (props) {
@@ -31,7 +141,7 @@ class ModalPichichis extends React.Component {
 		    {
 			  pichichisList.map(pichichi => {
 				return (
-				  <div key={pichichi.playerId}>
+				  <div key={pichichi.playerId} onClick={this.props.handleTransferenciasModal}>
 				   {
 					 this.props.players.map(player => {
 					   if (player.id === pichichi.playerId) {
@@ -69,13 +179,16 @@ class App extends PureComponent {
   constructor (props) {
     super(props);
 	this.togglePichichisModal = this.togglePichichisModal.bind(this);
+	this.toggleTransferenciaModal = this.toggleTransferenciaModal.bind(this);
+	this.updateData = this.updateData.bind(this);
   }
 
   state = {
     players: [],
     teams: [],
     pichichis: [],
-	pichichisVisible: false
+	pichichisVisible: false,
+	transferenciasVisible: false
   }
 
   componentDidMount() {
@@ -128,6 +241,30 @@ class App extends PureComponent {
   togglePichichisModal () {
 	this.setState({pichichisVisible: !this.state.pichichisVisible});
   }
+ 
+  toggleTransferenciaModal () {
+	if (this.state.pichichisVisible) {
+	  this.togglePichichisModal();
+	}
+	this.setState({transferenciasVisible: !this.state.transferenciasVisible});
+  }
+  
+  updateData () {
+    fetch(`${domain}/players`)
+	  .then(response => {
+		return response.json();
+	  })
+	  .then(players => {
+		this.setState({ players })
+	  });
+	fetch(`${domain}/teams`)
+	  .then(response => {
+		return response.json();
+	  })
+	  .then(teams => {
+		this.setState({ teams })
+	  });
+  }
 
   render() {
     const { players, teams, pichichis } = this.state
@@ -151,7 +288,7 @@ class App extends PureComponent {
          */}
 		 {players.map(player => {
 		  return (
-		    <div className="App-player" key={player.id}>
+		    <div className="App-player" key={player.id} onClick={this.toggleTransferenciaModal}>
 			  <div className="App-player-img">
 			    <img src={player.img}/>
 			  </div>
@@ -184,7 +321,8 @@ class App extends PureComponent {
 		 })
 	    }
       </div>
-	  <ModalPichichis handleModal={this.togglePichichisModal} pichichisVisible={this.state.pichichisVisible} pichichis={this.state.pichichis} players={this.state.players} />
+	  <ModalPichichis handleModal={this.togglePichichisModal} handleTransferenciasModal={this.toggleTransferenciaModal} pichichisVisible={this.state.pichichisVisible} pichichis={this.state.pichichis} players={this.state.players} />
+	  <ModalTransferencia updateApp={this.updateData} handleModal={this.toggleTransferenciaModal} transferenciasVisible={this.state.transferenciasVisible} teams={this.state.teams} players={this.state.players} />
     </div>
   }
 }

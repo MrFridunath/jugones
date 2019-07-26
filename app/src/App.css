@@ -43,6 +43,10 @@
   background-color: #c4c4c4;
 }
 
+.App-select {
+	margin-top: 5px;
+}
+
 .App-players {
   margin-top: 40px;
   flex-wrap: wrap;
@@ -59,6 +63,12 @@
   justify-content: center;
   padding: 10px;
   margin: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.App-player:hover {
+  transform: scale(1.1);
 }
 
 .App-player-img {
@@ -115,6 +125,12 @@
   padding: 10px;
   margin: 20px;
   display: flex;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.App-pichichi:hover {
+  transform: scale(1.04);
 }
 
 .App-pichichi-data {
@@ -152,6 +168,27 @@
   word-wrap: anywhere;
   text-align: left;
   overflow: auto;
+}
+
+.Modal-section-inline {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.Modal-section-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.Modal-input-budget {
+  margin-top: 20px;
+}
+
+.Modal-input-budget-style {
+  margin-left: 5px;
+  color: green;
 }
 
 .Modal-footer {
