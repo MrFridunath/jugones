@@ -105,6 +105,21 @@
   width: 25px;
 }
 
+.App-pichichi {
+  min-width: 280px;
+  border: solid 1px lightgray;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+}
+
+.App-pichichi-data {
+  margin-left: 10px;
+}
 
 .Modal {
   position: fixed;
