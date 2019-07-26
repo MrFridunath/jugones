@@ -79,27 +79,50 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    fetch(`${domain}/players`)
-      .then(response => {
-        return response.json();
-      })
-      .then(players => {
-        this.setState({ players })
-      });
-    fetch(`${domain}/teams`)
-      .then(response => {
-        return response.json();
-      })
-      .then(teams => {
-        this.setState({ teams })
-      });
-    fetch(`${domain}/pichichis`)
-      .then(response => {
-        return response.json();
-      })
-      .then(pichichis => {
-        this.setState({ pichichis })
-      });
+	if (window.localStorage.getItem(`lastKnown_${window.location.href}`)) {
+	  let lastKnownState = JSON.parse(window.localStorage.getItem(`lastKnown_${window.location.href}`));
+	  this.setState({players: lastKnownState.data.players});
+	  this.setState({teams: lastKnownState.data.teams});
+	  this.setState({pichichis: lastKnownState.data.pichichis});
+	}
+	else {
+      fetch(`${domain}/players`)
+        .then(response => {
+          return response.json();
+        })
+        .then(players => {
+          this.setState({ players })
+        });
+      fetch(`${domain}/teams`)
+        .then(response => {
+          return response.json();
+        })
+        .then(teams => {
+          this.setState({ teams })
+        });
+      fetch(`${domain}/pichichis`)
+        .then(response => {
+          return response.json();
+        })
+        .then(pichichis => {
+          this.setState({ pichichis })
+        });
+	}
+	window.addEventListener("beforeunload", (event) => {
+	  // event.preventDefault();
+	  if (this.state.players.length > 0) {
+        window.localStorage.setItem(
+          `lastKnown_${window.location.href}`,
+            JSON.stringify({
+			  component: document.querySelector('#app').innerHTML,
+              data: {
+                players: this.state.players,
+                teams: this.state.teams,
+                pichichis: this.state.pichichis,
+            }})
+        );
+	  }
+    });
   }
   
   togglePichichisModal () {
